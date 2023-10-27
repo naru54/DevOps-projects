@@ -1,0 +1,53 @@
+Install Jenkins, Nginx, and HTTPD
+
+  hosts: your_slaves
+  become: yes  # This is used to execute tasks with sudo privileges
+
+  tasks:
+    - name: Update package cache
+      apt:
+        update_cache: yes
+      become: yes
+
+    - name: Install Java (required for Jenkins)
+      apt:
+        name: openjdk-8-jdk
+        state: present
+      become: yes
+
+    - name: Install Jenkins
+      apt:
+        name: jenkins
+        state: present
+      become: yes
+
+    - name: Start Jenkins service
+      service:
+        name: jenkins
+        state: started
+      become: yes
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+      become: yes
+
+    - name: Install Apache HTTPD
+      apt:
+        name: apache2
+        state: present
+      become: yes
+
+    - name: Change Jenkins port
+      replace:
+        path: /etc/default/jenkins
+        regexp: 'HTTP_PORT=8080'
+        replace: 'HTTP_PORT=8081'  # Change this to your desired port
+      become: yes
+
+    - name: Start Jenkins service with the new port
+      service:
+        name: jenkins
+        state: started
+      become: yes
