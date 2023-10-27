@@ -1,0 +1,11 @@
+# Kubernetes RBAC (Role-Based Access Control) configuration
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: your-namespace
+  name: sample-role
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]
