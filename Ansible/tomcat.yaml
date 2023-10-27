@@ -1,0 +1,46 @@
+# install Apache Tomcat and change its port number on your slave machines using Ansible playbook
+# assume you're using Ubuntu Linux as the operating system on your slave machines. 
+# You can adjust the playbook for other Linux distributions as needed.
+
+---
+
+- hosts: web
+  name: Install Tomcat and Change Port
+  become: yes  # This is used to execute tasks with sudo privileges
+
+  tasks:
+    - name: Update package cache
+      apt:
+        update_cache: yes
+      become: yes
+
+    - name: Install OpenJDK 8
+      apt:
+        name: openjdk-8-jdk
+        state: present
+      become: yes
+
+    - name: Install Tomcat
+      apt:
+        name: tomcat9
+        state: present
+      become: yes
+
+    - name: Stop Tomcat service
+      service:
+        name: tomcat9
+        state: stopped
+      become: yes
+
+    - name: Change Tomcat port in server.xml
+      replace:
+        path: /etc/tomcat9/server.xml
+        regexp: '8080'
+        replace: '8081'  # Change this to your desired port
+      become: yes
+
+    - name: Start Tomcat service
+      service:
+        name: tomcat9
+        state: started
+      become: yes
