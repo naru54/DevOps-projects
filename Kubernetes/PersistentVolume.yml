@@ -1,0 +1,45 @@
+apiVersion: v1
+gcePersistentDisk: ~
+kind: PersistentVolume
+metadata: 
+name: test-volume
+spec: 
+accessModes: 
+- ReadWriteOnce
+awsElasticBlockStore: 
+fsType: ext4
+volumeID: ~
+capacity: 
+storage: 100Gi
+storageClassName: ebs-disk
+
+----
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: sample-pv
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: sample-storage-class
+  hostPath:
+    path: /data/sample-pv
+
+----
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sample-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: sample-storage-class
+

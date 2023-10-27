@@ -1,0 +1,77 @@
+# Ingress controller
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+ name: hello-world
+ annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+  - host: test.example.com
+    http:
+      paths:
+      - path: /hello-world
+        pathType: Prefix
+        backend:
+          service:
+            name: hello-world
+            port:
+              number: 8080
+----
+
+# path-based routing
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: path-based-ingress
+spec:
+  rules:
+  - host: example.com
+    http:
+      paths:
+      - path: /app1
+        pathType: Prefix
+        backend:
+          service:
+            name: service1
+            port:
+              number: 80
+      - path: /app2
+        pathType: Prefix
+        backend:
+          service:
+            name: service2
+            port:
+              number: 80
+----
+
+# host-based routing
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: host-based-ingress
+spec:
+  rules:
+  - host: app1.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: service1
+            port:
+              number: 80
+  - host: app2.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: service2
+            port:
+              number: 80
+
