@@ -17,10 +17,15 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: example-key
+              - key: key-naru@123
                 operator: In
                 values:
-                - example-value
+                - value-naru
       containers:
       - name: nginx
         image: nginx
+
+# In this example, we are creating a Deployment with a node affinity rule.
+# It specifies that Pods should be scheduled on nodes with a label example-key=example-value.
+
+
