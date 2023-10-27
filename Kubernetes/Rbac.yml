@@ -1,11 +1,33 @@
 # Kubernetes RBAC (Role-Based Access Control) configuration
 
+#Create a Role
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  namespace: your-namespace
-  name: sample-role
+  namespace: namespace1
+  name: my-role
 rules:
 - apiGroups: [""]
   resources: ["pods"]
   verbs: ["get", "list", "watch"]
+----
+#Create a RoleBinding:
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: my-rolebinding
+  namespace: namespace1
+subjects:
+- kind: ServiceAccount
+  name: naru-serviceaccount
+  namespace: namespace1
+roleRef:
+  kind: Role
+  name: my-role
+  apiGroup: rbac.authorization.k8s.io
+
+
+
+
+
+
