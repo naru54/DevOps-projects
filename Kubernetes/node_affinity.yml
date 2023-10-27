@@ -1,0 +1,26 @@
+example of how to apply node affinity and pod affinity in a Kubernetes deployment.
+# Node Affinity Configuration
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-affinity-deployment
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: node-affinity-pod
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: example-key
+                operator: In
+                values:
+                - example-value
+      containers:
+      - name: nginx
+        image: nginx
