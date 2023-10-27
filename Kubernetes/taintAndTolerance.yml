@@ -1,0 +1,32 @@
+# apply a taint and tolerance to a Kubernetes node.
+# This example sets a taint on a node and then creates a Pod with a toleration for that taint.
+
+#Create a Taint on a Node:
+apiVersion: v1
+kind: Node
+metadata:
+  name: node-name-to-taint
+spec:
+  taints:
+  - key: workload-type
+    value: special-workload
+    effect: NoSchedule
+    
+----
+
+# Create a Pod with Tolerations:
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sample-pod
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+  tolerations:
+  - key: workload-type
+    value: special-workload
+    effect: NoSchedule
+
+
+
