@@ -1,0 +1,27 @@
+#install nginx
+  hosts: web_servers
+  become: yes  # To run tasks with sudo
+
+  tasks:
+    - name: Update apt package cache (for Ubuntu/Debian)
+      apt:
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Install Nginx
+      package:
+        name: nginx
+        state: present
+      notify: Restart Nginx  # Trigger a handler to restart Nginx
+
+    - name: Start Nginx service
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
