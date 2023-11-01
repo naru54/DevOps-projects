@@ -1,0 +1,44 @@
+---
+- name: Install JBoss and WebSphere
+  hosts: application_servers
+  become: yes
+  vars:
+    jboss_download_url: "https://example.com/jboss.tar.gz"
+    websphere_download_url: "https://example.com/websphere.zip"
+
+  tasks:
+    - name: Download JBoss
+      get_url:
+        url: "{{ jboss_download_url }}"
+        dest: /tmp/jboss.tar.gz
+
+    - name: Extract JBoss
+      unarchive:
+        src: /tmp/jboss.tar.gz
+        dest: /opt/jboss
+        remote_src: yes
+
+    - name: Download WebSphere
+      get_url:
+        url: "{{ websphere_download_url }}"
+        dest: /tmp/websphere.zip
+
+    - name: Extract WebSphere
+      unarchive:
+        src: /tmp/websphere.zip
+        dest: /opt/websphere
+        remote_src: yes
+
+    - name: Start JBoss
+      command: /opt/jboss/bin/start.sh
+      async: 3600
+      poll: 0
+      ignore_errors: yes
+      when: jboss_installed.changed
+
+    - name: Start WebSphere
+      command: /opt/websphere/bin/start.sh
+      async: 3600
+      poll: 0
+      ignore_errors: yes
+      when: websphere_installed.changed
